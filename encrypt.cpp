@@ -32,7 +32,7 @@ int main(){
     // define text
     string inputText;
     cout<< "Please Enter Your String: ";
-    cin>> inputText;
+    getline(cin, inputText);
     // call function for encrypt string
     cout<<endl<< "output: "<< encript(inputText,key)<<endl;
     return 0;
