@@ -25,6 +25,13 @@ string encript(string inputText, int key){
     // return result
     return outputText;
 };
+// function to display hex
+void displayHex(string output){
+    int len = output.length();
+    for (int i = 0; i < len; i++){
+        cout<< hex<< int(output[i]);
+    }   
+};
 
 int main(){
     //key for encrypt
@@ -33,7 +40,10 @@ int main(){
     string inputText;
     cout<< "Please Enter Your String: ";
     getline(cin, inputText);
-    // call function for encrypt string
-    cout<<endl<< "output: "<< encript(inputText,key)<<endl;
+    // get output text
+    string outputText = encript(inputText, key);
+    // call function for display hex
+    displayHex(outputText);
+    cout<< endl;
     return 0;
 }
