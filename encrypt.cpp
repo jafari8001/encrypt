@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <string.h>
+#include <string>
 #include <cmath>
 using namespace std;
 
@@ -15,13 +16,21 @@ int getTime(){
 
 // encrypt function
 string encript(string inputText, int key){
-    //define output text 
+    //define output text
     string outputText = "";
     for(int i=0; i<inputText.length(); i++){ // if char be upper
-        if(inputText[i]>='A' && inputText[i]<='Z'){
-            outputText += char(int(inputText[i] + key - 65) % 26 + 65);
+        char ch = inputText[i];
+        if(isupper(inputText[i])){
+            for (int j = 0; j < key; j++){
+                ch = char(int(ch %26) + 65);
+            }
+            outputText += ch;
+
         }else{// if char be lower
-            outputText += char(int(inputText[i] + key - 97) % 26 + 97);
+            for (int j = 0; j < key; j++){
+                ch = char(int(ch %26) + 97);
+            }
+            outputText += ch;
         }
     };
     // return result
@@ -49,25 +58,76 @@ int convertHexToDec(string hex){
         }
         p--;
     }
-    cout<< result;
     return result;
 };
 
 //function for decode
-string decode(string inputTexe, int key){
+void decode(string inputTexe, int key){
     string hex= "";
-    string outPut = ""; 
+    int len = inputTexe.length()/2;
+    // array for decimal number
+    int decArray[len]; 
+    int j = 0;
     for (int i = 0; i < inputTexe.length(); i+=2){
         hex = "";
         hex += inputTexe[i];
         hex += inputTexe[i+1];
-        outPut += convertHexToDec(hex);
+        decArray[j] = convertHexToDec(hex);
+        j++;
     }
-    return outPut;
+
+    for (int i = 0; i < len ; i++){
+        int cipher = decArray[i];
+        // cout<< "cipher: "<< cipher<< endl;
+        for (int s = 97; s < 123; s++){
+            // int number = 97;
+            // cout<< "number: "<< number<< endl;
+            int guess = s;
+            for (int k = 0; k < key; k++){
+               guess = guess %26 +97;
+            }
+            // cout<< "guess: "<< guess<< endl;
+            if(guess == cipher){
+                cout<< char(s);
+                break;
+            }
+            // number += 1;
+        }   
+    }
+    
 };
 
-int main(){
+//function for get info to encription
+void forEncription(){
     int key;
+    //key for encrypt
+    key = getTime();
+    // define text
+    cout<< "Please Enter Your String: ";
+    string inputText;
+    getline(cin, inputText);
+    // get output text
+    string outputText = encript(inputText, key);
+    // call function for display hex
+    displayHex(outputText);
+    cout<< endl;
+};
+
+// function for get info to decoding
+void forDecoding(){
+    int key;
+    // get key and text
+    string str;
+    cout<< "please enter key:";
+    cin>> key;
+    cout<< "please enter text to decoding: ";
+    cin>> str;
+    // call function for decoding 
+    decode(str, key);
+    cout<< endl;
+}
+
+int main(){
     int method;
     cout<< "1: Encription"<< endl;
     cout<< "2: Decoding"<< endl;
@@ -75,26 +135,9 @@ int main(){
     cin>> method;
     // conditiion for choose method
     if (method == 1){ // for encript
-        //key for encrypt
-        key = getTime();
-        // define text
-        string inputText;
-        cout<< "Please Enter Your String: ";
-        cin>> inputText;
-        // get output text
-        string outputText = encript(inputText, key);
-        // call function for display hex
-        displayHex(outputText);
-        cout<< endl;
+        forEncription();
     } else if(method == 2){ // for decode
-        // get key and text
-        string str;
-        cout<< "please enter key:";
-        cin>> key;
-        cout<< "please enter text to decoding: ";
-        cin>> str;
-        // call function for decoding 
-        cout<< decode(str, key);
+        forDecoding();
     } else{
         cout<< "Not Define";
     }
