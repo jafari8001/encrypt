@@ -20,7 +20,9 @@ string encript(string inputText, int key){
     string outputText = "";
     for(int i=0; i<inputText.length(); i++){ // if char be upper
         char ch = inputText[i];
-        if(isupper(inputText[i])){
+        if( int(ch) == 32 ){
+            outputText += ch;
+        }else if(isupper(inputText[i])){
             for (int j = 0; j < key; j++){
                 ch = char(int(ch %26) + 65);
             }
@@ -70,14 +72,17 @@ void decode(string inputTexe, int key){
     int j = 0;
     for (int i = 0; i < inputTexe.length(); i+=2){
         hex = "";
-        hex += inputTexe[i];
-        hex += inputTexe[i+1];
+        hex += toupper(inputTexe[i]);
+        hex += toupper(inputTexe[i+1]);
         decArray[j] = convertHexToDec(hex);
         j++;
     }
 
     for (int i = 0; i < len ; i++){
         int cipher = decArray[i];
+            if( decArray[i] == 32 ){
+                cout<< " ";
+            }
         // cout<< "cipher: "<< cipher<< endl;
         for (int s = 97; s < 123; s++){
             // int number = 97;
@@ -128,15 +133,15 @@ void forDecoding(){
 }
 
 int main(){
-    int method;
+    string method;
     cout<< "1: Encription"<< endl;
     cout<< "2: Decoding"<< endl;
     cout<< "please choose method: ";
-    cin>> method;
+    getline(cin, method);
     // conditiion for choose method
-    if (method == 1){ // for encript
+    if (method == "1"){ // for encript
         forEncription();
-    } else if(method == 2){ // for decode
+    } else if(method == "2"){ // for decode
         forDecoding();
     } else{
         cout<< "Not Define";
